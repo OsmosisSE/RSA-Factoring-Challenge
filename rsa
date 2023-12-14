@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Function to check if a number is prime
+is_prime() {
+local num=$1
+if [ "$num" -lt 2 ]; then
+return 1
+fi
+for ((i = 2; i * i <= num; i++)); do
+if [ "$((num % i))" -eq 0 ]; then
+return 1
+fi
+done
+return 0
+}
+
+# Function to find the prime factors of a number
+prime_factors() {
+local num=$1
+local i=2
+while [ "$i" -le "$num" ]; do
+if [ "$((num % i))" -eq 0 ] && is_prime "$i"; then
+echo "$i"
+return
+fi
+((i++))
+done
+}
+
+if [ $# -ne 1 ]; then
+echo 'Usage: rsa <file>'
+exit 1
+fi
+
+while read number; do
+factor=$(prime_factors "$number")
+if [ -n "$factor" ]; then
+echo "$number=$factor*$(($number / factor))"
+else
+echo "Unable to factorize $number into prime numbers"
+fi
+done < "$1"

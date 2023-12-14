@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+factorize_number() {
+# Factorize a number into a product of two smaller numbers
+local number=$1
+local factors=$(factor "$number")
+local prime_factors=$(echo "$factors" | awk '{print $2, $3}')
+
+# Process the prime factors as needed
+# For example, you might want to print the factorization
+echo "$number=$prime_factors"
+}
+
+if [ $# -ne 1 ]; then
+echo 'Usage: factors <file>'
+exit 1
+fi
+
+while read number; do
+factorize_number "$number"
+done < "$1"
